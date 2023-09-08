@@ -1,11 +1,14 @@
 const express = require("express");
 const morgan = require("morgan");
+const cors = require("cors");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 const mongoSanitize = require("express-mongo-sanitize");
 const xss = require("xss-clean");
 const hpp = require("hpp");
 const propertyRouter = require("./routes/propertiesRoute");
+const requestRouter = require("./routes/request");
+const oauthRouter = require("./routes/oauth");
 const userRouter = require("./routes/usersRoute");
 const reviewRouter = require("./routes/reviewRoutes");
 const agentRouter = require("./routes/agentRoutes");
@@ -14,6 +17,9 @@ const AppError = require("./utils/appError");
 const path = require("path");
 
 const app = express();
+
+//Cross-Origin Resource Sharing to pass the frontend
+app.use(cors());
 
 //Using helmet package(set special security headers) against Xss attacks
 app.use(helmet());
@@ -46,6 +52,8 @@ app.use(xss());
 app.use(hpp({ whitelist: ["toilets", "bedrooms", "baths", "price"] }));
 
 //Mount the Router
+app.use("/api/v1/oauth", oauthRouter);
+app.use("/api/v1/request", requestRouter);
 app.use("/api/v1/properties", propertyRouter);
 app.use("/api/v1/users", userRouter);
 app.use("/api/v1/reviews", reviewRouter);

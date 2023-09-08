@@ -22,11 +22,11 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("Connected to Database");
+    console.log("Connected to Database...");
+  })
+  .catch((err) => {
+    console.log(err);
   });
-//.catch((err) => {
-//  console.log(err);
-//});
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
